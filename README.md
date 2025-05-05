@@ -7,9 +7,9 @@
 
 ## Table of Contents 📁
 
-1. [**Architecture Overview**](#architecture-overview-)
-2. [**Features Implemented**](#features-implemented-)
-3. [**Security Architecture**](#security-architecture-)
+1. [**Architecture Overview**](#-architecture-overview)
+2. [**Features Implemented**](#features-implemented)
+3. [**Security Architecture**](#security-architecture)
 4. [**Project Structure**](#project-structure)
 5. [**Example Flow**](#example-flow)
 6. [**How to Run Locally**](#how-to-run-locally)
