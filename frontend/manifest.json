@@ -1,0 +1,16 @@
+{
+    "name": "GreenGait",
+    "short_name": "GreenGait",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#e9f5ec",
+    "theme_color": "#2b7a0b",
+    "icons": [
+      {
+        "src": "icon.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      }
+    ]
+  }
+  
