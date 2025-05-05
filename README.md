@@ -1,4 +1,4 @@
-# 🍃 GreenGait – Step Into Web3 Rewards 🍃
+# 🍃 GreenGait 🍃
 
 **GreenGait** is a Web3 rewards platform that transforms physical activity into real digital value using the Solana blockchain. With a secure, Wi-Fi-enabled wearable device (ESP32), every step you take is cryptographically signed and submitted to the blockchain – all in real time.
 🏆️️ + ✅ → 💰 on-chain.
@@ -40,17 +40,18 @@ Displays step history and reward data tied to each wallet.
   * PDA derivation per `(user, day)`
   * On-chain logging + token minting (3 steps = 1 token)
 * ✅ **Anchor program** with `log_step` instruction
-* ✅ \*\*Solana Devnet deployment\`
+* ✅ **Solana Devnet deployment**
 
 ---
 
 ## 🔐 Security Architecture
 
 * HMAC-SHA256 signed payloads (shared secret)
-* Timestamp validation (±30s) to prevent replay attacks
+* Timestamp validation to prevent replay attacks
 * TLS mutual authentication (ESP32 ↔ EMQX ↔ backend)
-* Backend uses a hardened VPS (GCP) + cert-based MQTT
-* PDA ensures unique per-user per-day data segregation
+* EMQX Broker enforces certificate-based access and ACL rules
+* Backend hosted on a hardened Google Cloud VPS with firewall and TLS
+* Program Derived Addresses (PDAs) ensure unique, tamper-proof on-chain step logs per `(user, day)`
 
 ---
 
