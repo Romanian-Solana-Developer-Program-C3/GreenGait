@@ -76,7 +76,7 @@ GreenGait/
 ├── solana/               # CLI scripts, account utilities, program deploy
 ├── frontend/             # (WIP) UI for displaying step history and rewards
 ├── firmware/             # ESP32 Arduino code (WiFi, MQTT, HMAC)
-├── docs/                 # PPT Presentation + Logo
+├── docs/                 # Arch-Diagram + PPT Presentation + Logo
 └── README.md             # You're here!
 ```
 
