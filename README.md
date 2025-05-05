@@ -5,6 +5,20 @@
 
 ---
 
+## Table of Contents 📁
+
+1. [**Architecture Overview**](#architecture-overview)
+2. [**Features Implemented**](#features-implemented)
+3. [**Security Architecture**](#security-architecture)
+4. [**Project Structure**](#project-structure)
+5. [**Example Flow**](#example-flow)
+6. [**How to Run Locally**](#how-to-run-locally)
+7. [**What's Next?**](#whats-next)
+8. [**Live Preview**](#live-preview)
+9. [**Author**](#author)
+
+---
+
 ## 🌐 Architecture Overview
 
 🔹 **ESP32-WROOM-32D**
@@ -14,42 +28,43 @@ A microcontroller that simulates steps via a button. Sends step data via MQTT ov
 Secure communication using custom client certificates and a trusted CA, protecting against unauthorized devices.
 
 🧠 **Rust Backend Validator**
-Receives messages via MQTT, validates their authenticity (HMAC + timestamp), then logs valid steps on-chain through a Solana program.
+Receives messages via MQTT, validates authenticity (HMAC + timestamp), then logs valid steps on-chain via a Solana smart contract.
 
 ⛓️ **Solana Anchor Program**
-Smart contract deployed on Devnet, using Program Derived Addresses (PDAs) to store step data per user per day. Also supports token minting for every 3 steps.
+Deployed on Devnet. Uses Program Derived Addresses (PDAs) to store step data per user per day. Tokens are minted automatically every 3 steps.
 
-📡 **EMQX Broker (on Google Cloud VPS)**
-Handles secure MQTT message routing, enforcing TLS and ACL-based authentication.
+📡 **EMQX Broker (Google Cloud VPS)**
+A hardened MQTT broker with TLS, ACL rules, and certificate-based access control.
 
-🖥️ **Frontend Interface** *(WIP)*
-Displays step history and reward data tied to each wallet.
+🖥️ **Frontend Interface** *(in progress)*
+Visualizes your step history and blockchain rewards in a simple dashboard.
 
 ---
 
 ## ✅ Features Implemented
 
-- ✅ **ESP32 device** with WiFi + MQTT + TLS client auth
-- ✅ **TLS mutual authentication** via custom certificates
-- ✅ **HMAC-SHA256** signature generation on device
-- ✅ **JSON payload** with: `steps`, `timestamp`, `nonce`, `signature`
-- ✅ **Rust backend**:
-  - MQTT TLS client
-  - HMAC & timestamp validation
-  - PDA-based step tracking and token minting
-- ✅ **Solana Anchor program** with `log_step` instruction
-- ✅ **Solana Devnet** deployment and testing
+* ✅ **ESP32 device** with WiFi + MQTT + TLS client auth
+* ✅ **TLS mutual authentication** via custom certificates
+* ✅ **HMAC-SHA256** signature generation on device
+* ✅ **JSON payload** with: `steps`, `timestamp`, `nonce`, `signature`
+* ✅ **Rust backend**:
+
+  * MQTT TLS client
+  * HMAC & timestamp validation
+  * PDA-based step tracking and token minting
+* ✅ **Solana Anchor program** with `log_step` instruction
+* ✅ **Solana Devnet** deployment and testing
 
 ---
 
 ## 🔐 Security Architecture
 
-- HMAC-SHA256 signed payloads (shared secret)
-- Timestamp validation to prevent replay attacks (±30s)
-- TLS mutual authentication (ESP32 ↔ EMQX ↔ backend)
-- EMQX Broker enforces certificate-based access and ACL rules
-- Backend runs on a hardened Google Cloud VPS with TLS
-- PDA ensures unique, tamper-proof on-chain logs per `(user, day)`
+* HMAC-SHA256 signed payloads (shared secret)
+* Timestamp validation to prevent replay attacks (±30s)
+* TLS mutual authentication (ESP32 ↔ EMQX ↔ backend)
+* EMQX Broker enforces certificate-based access and ACL rules
+* Backend runs on a hardened Google Cloud VPS with TLS
+* PDA ensures unique, tamper-proof on-chain logs per `(user, day)`
 
 ---
 
@@ -82,8 +97,12 @@ GreenGait/
 
 ### 1. Flash the ESP32
 
-Upload `ESP32.ino` from the `firmware/` folder using Arduino IDE.
-Ensure `certificates.h` contains your TLS client cert/key and CA.
+Upload `ESP32.ino` from `firmware/` using Arduino IDE.
+Make sure `certificates.h` contains:
+
+* `ca.crt`
+* `client.crt`
+* `client.key`
 
 ### 2. Start the Rust Backend
 
@@ -92,7 +111,7 @@ cd backend
 cargo run
 ```
 
-Ensure the following files exist in `certs/`:
+Make sure these files exist in `certs/`:
 
 ```
 ca.crt
@@ -101,7 +120,7 @@ client.key
 stepmint-validator.json (Solana keypair)
 ```
 
-### 3. Run Tests
+### 3. Run the Solana Tests
 
 ```bash
 cd solana_program
@@ -113,16 +132,16 @@ anchor test
 ## 🌟 What's Next?
 
 * [ ] 🧠 PDA optimization + on-chain compression
-* [ ] 💎 NFT/token design for milestones
-* [ ] 🎨 UI dashboard for wallet-based stats
-* [ ] 🔄 ESP32 OTA firmware updates
-* [ ] 🛡️ Anti-spoofing + abuse protection
+* [ ] 💎 NFT/token design for major milestones
+* [ ] 🎨 Dashboard UI with wallet connection and real-time stats
+* [ ] 🔄 ESP32 OTA firmware delivery
+* [ ] 🛡️ Replay prevention & abuse detection
 
 ---
 
-## 🚀 Live Preview 
+## 🚀 Live Preview
 
-Coming soon: Hosted UI for interacting with your GreenGait account, token rewards, and leaderboard integration.
+A hosted UI is coming soon — where users can track their steps, tokens, and compete on the leaderboard 🌍
 
 ---
 
@@ -136,4 +155,4 @@ MSc Student in Cybersecurity @ Technical University of Cluj-Napoca
 
 ---
 
-> 🍃 *GreenGait – where every step counts... on-chain.*
+> 🍃 *GreenGait – where every step counts… on-chain, securely, and sustainably.*
