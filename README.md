@@ -8,14 +8,14 @@
 ## Table of Contents 📁
 
 1. [**Architecture Overview**](#-architecture-overview)
-2. [**Features Implemented**](#features-implemented)
-3. [**Security Architecture**](#security-architecture)
-4. [**Project Structure**](#project-structure)
-5. [**Example Flow**](#example-flow)
-6. [**How to Run Locally**](#how-to-run-locally)
-7. [**What's Next?**](#whats-next)
-8. [**Live Preview**](#live-preview)
-9. [**Author**](#author)
+2. [**Features Implemented**](#-features-implemented)
+3. [**Security Architecture**](#-security-architecture)
+4. [**Project Structure**](#-project-structure)
+5. [**Example Flow**](#-example-flow)
+6. [**How to Run Locally**](#-how-to-run-locally)
+7. [**What's Next?**](#-whats-next)
+8. [**Live Preview**](#-live-preview)
+9. [**Author**](#-author)
 
 ---
 
