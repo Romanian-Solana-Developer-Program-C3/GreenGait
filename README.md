@@ -136,7 +136,7 @@ anchor test
 * [ ] 🔄 ESP32 OTA firmware delivery
 * [ ] 🛡️ Replay prevention & abuse detection
 * [ ] 🔋 Connection with energy harvesting system
-* [ ] 🛰️  GPS Accuracy
+* [ ] 🛰️ GPS Accuracy
 
 ---
 
