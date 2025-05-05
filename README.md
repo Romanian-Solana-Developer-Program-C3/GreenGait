@@ -1,87 +1,140 @@
 # 🍃 GreenGait – Step Into Web3 Rewards 🍃
 
-**GreenGait** is a Web3 rewards app that turns your steps into real value using blockchain technology. With a wearable shoe-mounted device, every step is securely tracked, cryptographically signed, and sent to a backend that logs it on the Solana blockchain. 🚶‍♂️→ 💰
+**GreenGait** is a Web3 rewards platform that transforms physical activity into real digital value using the Solana blockchain. With a secure, Wi-Fi-enabled wearable device (ESP32), every step you take is cryptographically signed and submitted to the blockchain – all in real time.
+🏆️️ + ✅ → 💰 on-chain.
+
+---
 
 ## 🌐 Architecture Overview
 
-🟢 **ESP32-WROOM-32D** – The main microcontroller, connected via Wi-Fi, with a physical button used to simulate walking steps.
+🔹 **ESP32-WROOM-32D**
+A microcontroller that simulates steps via a button. Sends step data via MQTT over TLS using mutual certificate authentication.
 
-🔒 **TLS Mutual Authentication** – Secure communication between the ESP32 device and a cloud platform using MQTT over TLS (port 8883) with client certificate authentication.
+🔐 **TLS Mutual Authentication**
+Secure communication using custom client certificates and a trusted CA, protecting against unauthorized devices.
 
-☁️ **Google Cloud VPS + EMQX** – A secure MQTT broker hosted on a GCP virtual private server, configured with mutual TLS and ACL rules.
+🧠 **Rust Backend Validator**
+Receives messages via MQTT, validates their authenticity (HMAC + timestamp), then logs valid steps on-chain through a Solana program.
 
-🧠 **Rust Backend** – A validator application that receives messages via MQTT, verifies HMAC signatures and timestamps, and logs step data to the blockchain.
+⛓️ **Solana Anchor Program**
+Smart contract deployed on Devnet, using Program Derived Addresses (PDAs) to store step data per user per day. Also supports token minting for every 3 steps.
 
-📦 **Blockchain Integration (WIP)** – Solana/Anchor integration is in progress. For now, symbolic transactions (e.g. 0.00001 SOL) are sent for validation purposes.
+📡 **EMQX Broker (on Google Cloud VPS)**
+Handles secure MQTT message routing, enforcing TLS and ACL-based authentication.
 
----
-
-## ✅ Features Implemented So Far
-
-- ✅ ESP32 connected to WiFi with mutual TLS authentication
-- ✅ HMAC signature generation on the device (`crypto_hmac.h`)
-- ✅ JSON payload transmission including `steps`, `timestamp`, `nonce`, and `signature`
-- ✅ Rust backend:
-  - TLS-authenticated MQTT client
-  - HMAC and timestamp validation
-  - Step data logging via symbolic Solana transaction (`blockchain.rs`)
-- ✅ Google Cloud VPS running secure EMQX broker
+🖥️ **Frontend Interface** *(WIP)*
+Displays step history and reward data tied to each wallet.
 
 ---
 
-## 🔐 Security Design
+## ✅ Features Implemented
 
-- HMAC-SHA256 authentication with a pre-shared secret
-- Timestamp validation to prevent replay attacks (±30 seconds)
-- Mutual TLS (device ↔ broker)
-- Backend isolated on a hardened cloud VPS
+* ✅ **ESP32 device** with WiFi + MQTT + TLS client auth
+* ✅ **TLS Mutual Authentication** (EMQX broker with CA and client certs)
+* ✅ **HMAC-SHA256** signature from the device
+* ✅ **JSON payload**: steps, timestamp, nonce, and signature
+* ✅ **Rust backend**:
+
+  * MQTT client with client cert
+  * HMAC + timestamp verification
+  * PDA derivation per `(user, day)`
+  * On-chain logging + token minting (3 steps = 1 token)
+* ✅ **Anchor program** with `log_step` instruction
+* ✅ \*\*Solana Devnet deployment\`
+
+---
+
+## 🔐 Security Architecture
+
+* HMAC-SHA256 signed payloads (shared secret)
+* Timestamp validation (±30s) to prevent replay attacks
+* TLS mutual authentication (ESP32 ↔ EMQX ↔ backend)
+* Backend uses a hardened VPS (GCP) + cert-based MQTT
+* PDA ensures unique per-user per-day data segregation
 
 ---
 
 ## 📁 Project Structure
 
-firmware/ ├── ESP32.ino # ESP32 code (WiFi + MQTT + HMAC) ├── certificates.h # CA certificate, client cert & key ├── crypto_hmac.h # HMAC-SHA256 function
-
-backend/ ├── main.rs # Rust backend entry point ├── mqtt.rs # TLS MQTT client + message handling ├── blockchain.rs # Solana step logging (symbolic tx) ├── config.rs # Broker config + certificate paths ├── security.rs # HMAC and timestamp validation
-
-
----
-
-## 🛠️ What's Next?
-
-- [ ] 🪙 Full Solana Anchor program integration
-- [ ] 🧠 PDAs per user & persistent on-chain step accounts
-- [ ] 🎨 UI for step history and rewards display
-- [ ] 💎 Token/NFT minting as walking rewards
+```
+greengait_project/
+├── backend_rust/         # Rust backend (MQTT client, validation, blockchain interaction)
+├── greengait_program/    # Anchor smart contract + TypeScript tests
+├── greengait_solana/     # CLI scripts, account utilities, program deploy
+├── greengait_frontend/   # (WIP) UI for displaying step history and rewards
+├── certs/                # ca.crt, client.crt, client.key, validator keypair
+├── firmware/             # ESP32 Arduino code (WiFi, MQTT, HMAC)
+└── README.md             # You're here!
+```
 
 ---
 
-## 🚀 How to Run
+## 🦪 Example Flow
+
+1. Press the button → ESP32 sends a JSON payload with steps, timestamp, HMAC
+2. MQTT broker forwards it securely to the backend
+3. Backend verifies payload → signs & sends a transaction to Solana
+4. Anchor program logs step data (per day) & mints token if needed
+5. User can view total steps and rewards in the frontend (coming soon)
+
+---
+
+## 🛠 How to Run Locally
 
 ### 1. Flash the ESP32
-Use Arduino IDE or PlatformIO to upload `ESP32.ino`. Make sure `certificates.h` includes the TLS certificates generated for EMQX.
 
-### 2. Run the Rust Backend
+Upload `ESP32.ino` from the `firmware/` folder using Arduino IDE.
+Ensure `certificates.h` contains your TLS client cert/key and CA.
+
+### 2. Start the Rust Backend
 
 ```bash
-cd backend
+cd backend_rust
 cargo run
 ```
-Ensure the following certificate/key files exist under backend/certs/:
 
-```bash
+Ensure the following files exist in `certs/`:
+
+```
 ca.crt
 client.crt
 client.key
 stepmint-validator.json (Solana keypair)
 ```
 
+### 3. Run Tests
+
+```bash
+cd solana_program
+anchor test
+```
+
 ---
 
-## 📬 Contact
-Robert Panța
+## 🌟 What's Next?
 
-MSc Student in Cybersecurity – Technical University of Cluj-Napoca
+* [ ] 🧠 PDA optimization + on-chain compression
+* [ ] 💎 NFT/token design for milestones
+* [ ] 🎨 UI dashboard for wallet-based stats
+* [ ] 🔄 ESP32 OTA firmware updates
+* [ ] 🛡️ Anti-spoofing + abuse protection
 
-📫 **[LinkedIn](https://www.linkedin.com/in/robert-panta/)**
-🌐 **[GitHub](https://github.com/RobCyberLab)**
+---
+
+## 🚀 Live Preview (Soon)
+
+Coming soon: Hosted UI for interacting with your GreenGait account, token rewards, and leaderboard integration.
+
+---
+
+## 👤 Author
+
+**Robert Panța**
+MSc Student in Cybersecurity @ Technical University of Cluj-Napoca
+
+* 📧 [LinkedIn](https://www.linkedin.com/in/robert-panta/)
+* 🌐 [GitHub](https://github.com/RobCyberLab)
+
+---
+
+> 🍃 *GreenGait – where every step counts... on-chain.*
