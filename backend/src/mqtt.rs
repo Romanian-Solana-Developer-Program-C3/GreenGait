@@ -5,10 +5,13 @@ use std::fs::File;
 use std::io::BufReader;
 use std::sync::Arc;
 use std::time::Duration;
+use tokio::task::spawn_blocking;
+
 
 use crate::config::*;
 use crate::security::{verify_hmac, verify_timestamp, clean_payload};
 use crate::blockchain::log_step_on_chain;
+use crate::state::STATUS;
 
 pub async fn start_mqtt() {
     // 🔐 1. Citim certificatele pentru TLS mutual
@@ -66,16 +69,35 @@ pub async fn start_mqtt() {
                         if verify_timestamp(timestamp.as_i64().unwrap()) {
                             println!("[SECURITY] ✅ Valid HMAC and Timestamp - Steps: {}", steps);
 
-                            // 🔗 4. Salvăm pașii pe blockchain
-                            let user_pubkey = "Cc52Gii4BKdPCBUtbScNHVELuFEdomem5FDCsb9QuprA";
-                            match log_step_on_chain(
-                                user_pubkey,
-                                steps.as_u64().unwrap(),
-                                timestamp.as_i64().unwrap()
-                            ).await {
-                                Ok(sig) => println!("[CHAIN] ✅ Step logged on Solana - Tx: {}", sig),
-                                Err(e) => eprintln!("[CHAIN] ❌ Error logging on chain: {}", e),
-                            }
+                            // 🔗 4. Salvăm pașii pe blockchain în fundal (non-blocking)
+                            // let user_pubkey = "Cc52Gii4BKdPCBUtbScNHVELuFEdomem5FDCsb9QuprA".to_string();
+                            let user_pubkey = json.get("pubkey").unwrap().as_str().unwrap().to_string();
+
+                            let steps = steps.as_u64().unwrap();
+                            let timestamp = timestamp.as_i64().unwrap();
+
+                            use chrono::Utc;
+                            let now = Utc::now().naive_utc();
+                            let day = now.format("%Y%m%d").to_string().parse::<i64>().unwrap();
+
+                            spawn_blocking(move || {
+                                let mint_address = "2S17Ma6eDo2NgZQDv6Vda3hKJPwaCtBWqhen5ThVU3yk";
+                                let result = tokio::runtime::Handle::current().block_on(async move {
+                                    log_step_on_chain(&user_pubkey, steps, day, mint_address).await
+                                });
+                            
+                                match result {
+                                    Ok(sig) => { println!("[CHAIN] ✅ Step logged on Solana - Tx: {}", sig);
+                                    // ✅ Actualizează STATUS global
+                                    let mut status = STATUS.lock().unwrap();
+                                    status.steps += steps;
+                                    status.tokens = status.steps / 3;
+                                    },
+                                    Err(e) => eprintln!("[CHAIN] ❌ Error logging on chain: {}", e),
+                                }
+                            });
+                            
+                            
                         } else {
                             println!("[SECURITY] ❌ Invalid Timestamp");
                         }

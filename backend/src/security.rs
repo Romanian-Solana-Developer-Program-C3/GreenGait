@@ -17,8 +17,11 @@ pub fn verify_hmac(payload: &str, signature: &str, secret: &str) -> bool {
 /// Verifică dacă timestamp-ul e în toleranță (30 secunde)
 pub fn verify_timestamp(timestamp: i64) -> bool {
     let now = Utc::now().timestamp();
-    (now - timestamp).abs() <= 30
+    let delta = (now - timestamp).abs();
+    println!("[SECURITY] ⏱️ Timestamp delta: {} seconds", delta);
+    delta <= 120  // <-- increased from 30 to 120
 }
+
 
 /// Extrage payload-ul fără câmpul "signature"
 pub fn clean_payload(json: &str) -> String {
