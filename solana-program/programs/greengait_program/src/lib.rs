@@ -98,7 +98,7 @@
 // }
 
 use anchor_lang::prelude::*;
-use anchor_spl::token::{mint_to, Mint, TokenAccount, Token, MintTo};  // Import MintTo correctly
+use anchor_spl::token::{mint_to, Token, MintTo};  
 // use anchor_spl::associated_token::AssociatedToken; // This import is not needed if you're not using it
 
 declare_id!("DYf1G6UEyAebNDfgkQodKUvPBAZJXMCkBtWgRMpS8SaE");
@@ -108,6 +108,8 @@ pub mod greengait_program {
     use super::*;
 
     pub fn log_step(ctx: Context<LogStep>, steps: u64, day: i64) -> Result<()> {
+        //require!(steps > 0, ErrorCode::InvalidStepAmount); // 🔐 NU permitem 0 pași
+
         let step_data = &mut ctx.accounts.step_data;
 
         
@@ -184,3 +186,9 @@ pub struct StepData {
     pub day: i64,
     pub last_minted: u64,
 }
+
+// #[error_code]
+// pub enum ErrorCode {
+//     #[msg("Step amount must be > 0")]
+//     InvalidStepAmount,
+// }
