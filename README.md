@@ -137,6 +137,7 @@ anchor test
 * [ ] 🛡️ Replay prevention & abuse detection
 * [ ] 🔋 Connection with energy harvesting system
 * [ ] 🛰️ GPS Accuracy
+* [ ] 🗄️ User Database
 
 ---
 
