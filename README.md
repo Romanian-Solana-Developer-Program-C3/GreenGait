@@ -14,8 +14,7 @@
 5. [**Example Flow**](#-example-flow)
 6. [**How to Run Locally**](#-how-to-run-locally)
 7. [**What's Next?**](#-whats-next)
-8. [**Live Preview**](#-live-preview)
-9. [**Author**](#-author)
+8. [**Author**](#-author)
 
 ---
 
@@ -36,7 +35,7 @@ Deployed on Devnet. Uses Program Derived Addresses (PDAs) to store step data per
 📡 **EMQX Broker (Google Cloud VPS)**
 A hardened MQTT broker with TLS, ACL rules, and certificate-based access control.
 
-🖥️ **Frontend Interface** *(in progress)*
+🖥️ **Frontend Interface**
 Visualizes your step history and blockchain rewards in a simple dashboard.
 
 ---
@@ -131,17 +130,12 @@ anchor test
 
 ## 🌟 What's Next?
 
-* [ ] 🧠 PDA optimization + on-chain compression
+* [ ] 🧠 PDA optimization
 * [ ] 💎 NFT/token design for major milestones
 * [ ] 🎨 Dashboard UI with wallet connection and real-time stats
 * [ ] 🔄 ESP32 OTA firmware delivery
 * [ ] 🛡️ Replay prevention & abuse detection
-
----
-
-## 🚀 Live Preview
-
-A hosted UI is coming soon — where users can track their steps, tokens, and compete on the leaderboard 🌍
+* [ ] 🔋 Connection with energy harvesting system
 
 ---
 
