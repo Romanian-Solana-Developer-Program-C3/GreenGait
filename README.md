@@ -142,6 +142,7 @@ anchor test
 ## 👤 Author
 
 **Robert Panța**
+
 MSc Student in Cybersecurity @ Technical University of Cluj-Napoca
 
 * 📧 [LinkedIn](https://www.linkedin.com/in/robert-panta/)
