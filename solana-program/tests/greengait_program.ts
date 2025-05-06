@@ -1,20 +1,3 @@
-// import * as anchor from "@coral-xyz/anchor";
-// import { Program } from "@coral-xyz/anchor";
-// import { GreengaitProgram } from "../target/types/greengait_program";
-
-// describe("greengait_program", () => {
-//   // Configure the client to use the local cluster.
-//   anchor.setProvider(anchor.AnchorProvider.env());
-
-//   const program = anchor.workspace.GreengaitProgram as Program<GreengaitProgram>;
-
-//   it("Is initialized!", async () => {
-//     // Add your test here.
-//     // const tx = await program.methods.initialize().rpc();
-//     // console.log("Your transaction signature", tx);
-//   });
-// });
-
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { GreengaitProgram } from "../target/types/greengait_program";
@@ -55,10 +38,10 @@ describe("greengait_program", () => {
   it("✅ Minting tokens for 6 steps", async () => {
     const { mint, userAta } = await mintAndPrepare();
     const generateUniqueDay = () => {
-      const now = Date.now(); // timestamp în milisecunde
-      return Math.floor(now / 1000); // îl facem UNIX timestamp în secunde
+      const now = Date.now(); // timestamp in miliseconds
+      return Math.floor(now / 1000); // UNIX timestamp in seconds
     };
-    
+
     const day = generateUniqueDay();
     const [stepDataPda] = deriveStepDataPda(signer.publicKey, day);
 
@@ -88,10 +71,10 @@ describe("greengait_program", () => {
   it("❌ Not minting tokens for 2 steps", async () => {
     const { mint, userAta } = await mintAndPrepare();
     const generateUniqueDay = () => {
-      const now = Date.now(); // timestamp în milisecunde
-      return Math.floor(now / 1000); // îl facem UNIX timestamp în secunde
+      const now = Date.now(); // timestamp in miliseconds
+      return Math.floor(now / 1000); // UNIX timestamp in seconds
     };
-    
+
     const day = generateUniqueDay();
     const [stepDataPda] = deriveStepDataPda(signer.publicKey, day);
 

@@ -9,4 +9,3 @@ pub const CLIENT_CERT: &str = "certs/client.crt";
 pub const CLIENT_KEY: &str = "certs/client.key";
 
 pub const HMAC_SECRET: &str = "my_secret_key";
-

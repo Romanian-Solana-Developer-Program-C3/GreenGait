@@ -1,11 +1,12 @@
 [toolchain]
+# anchor_version = "0.30.1"
 
 [features]
 resolution = true
 skip-lint = false
 
 [programs.localnet]
-greengait_program = "DYf1G6UEyAebNDfgkQodKUvPBAZJXMCkBtWgRMpS8SaE"
+greengait_program = "5LmnBPt81icjN2GE6o2duFEQGQ6J3dptDhxaaVtz5Wj6"
 
 [registry]
 url = "https://api.apr.dev"
@@ -16,3 +17,4 @@ wallet = "target/deploy/greengait-keypair.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+
