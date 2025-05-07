@@ -127,7 +127,7 @@ anchor test
 ```
 
 <p align="center">
-  <img src="test.png" alt="Tests" width="800">
+  <img src="test.png" alt="Tests" width="850">
   <br>
   <em>Tests</em>
 </p>
