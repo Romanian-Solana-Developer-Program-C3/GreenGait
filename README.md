@@ -123,6 +123,7 @@ stepmint-validator.json (Solana keypair)
 
 ```bash
 cd solana_program
+anchor build
 anchor test
 ```
 
@@ -132,6 +133,17 @@ anchor test
   <em>Tests</em>
 </p>
 
+### 4. Deploy the Solana Program
+
+```bash
+anchor deploy
+```
+
+<p align="center">
+  <img src="deploy.png" alt="Deploy" width="850">
+  <br>
+  <em>Deploy</em>
+</p>
 
 ---
 
