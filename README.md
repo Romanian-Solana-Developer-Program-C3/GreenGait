@@ -126,6 +126,13 @@ cd solana_program
 anchor test
 ```
 
+<p align="center">
+  <img src="test.png" alt="Tests" width="800">
+  <br>
+  <em>Tests</em>
+</p>
+
+
 ---
 
 ## 🌟 What's Next?
