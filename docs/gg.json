@@ -1,7 +1,0 @@
-{
-  "name": "GreenGait Token",
-  "symbol": "GG",
-  "description": "A reward token for walking, used in the GreenGait project.",
-  "image": "https://raw.githubusercontent.com/Romanian-Solana-Developer-Program-C3/GreenGait/main/docs/Logo.png",
-  "decimals": 9
-}
